@@ -1,0 +1,7 @@
+To Do:
+
+eventManager✓
+eCalendar✓
+persoon✓
+afspraak
+auto

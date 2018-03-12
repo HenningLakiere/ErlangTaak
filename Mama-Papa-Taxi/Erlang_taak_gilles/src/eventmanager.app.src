@@ -1,0 +1,13 @@
+{application, eventmanager, [
+    {description, "Event manager"},
+    {vsn, "0.1.1"},
+    {modules, []},
+    {registered, [event_manager]},
+    {applications, [
+        kernel,
+        stdlib
+    ]},
+    {mod, {eventmanager_app, []}},
+    {env, []}
+]}.
+
