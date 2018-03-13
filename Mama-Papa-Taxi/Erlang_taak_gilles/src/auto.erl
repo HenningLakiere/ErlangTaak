@@ -40,4 +40,3 @@ loop(Reservaties) ->
 			?MODULE:loop(Reservaties);
 		stop -> ok
     end.
-Ä

@@ -1,17 +1,20 @@
 -module(persoon).
--export([new/0, init/0, maakAfspraak/2, volgendeAfspraak/1, cancelVolgendeAfspraak/1, cancelAfspraak/2, loop/1, die/1]).
+
+-export([new/0, init/0, loop/1, die/1]).
+-export([maakAfspraak/2, volgendeAfspraak/1, cancelVolgendeAfspraak/1, cancelVolgendeAfspraak/2, cancelAfspraak/2]).
 
 new() ->
 	Pid = spawn(?MODULE, init, []),
 	Pid.
 
 init() ->
-	Afspraken = ets:new(afspraken, [ordered_set, public, named_table]),
+	Afspraken = ets:new(afspraken, [ordered_set, public]),
 	maakAfspraak(Afspraken, {infinity, infinity, die, false}),
 	loop(Afspraken).
 
 die(Afspraken) ->
-	ets:delete(Afspraken).
+	ets:delete(Afspraken),
+	{stop}.
 
 % B = begintijd afspraak
 % E = eindtijd afspraak
@@ -20,7 +23,6 @@ die(Afspraken) ->
 
 maakAfspraak(Afspraken, {infinity, infinity, D, A}) ->
 	ets:insert(Afspraken, {{infinity, make_ref()}, infinity , D, A});
-	%eventManager:post({infinity, activiteit, testActiviteit, [self(), infinity, infinity, D, A]});
 
 maakAfspraak(Afspraken, {B, E, D, A})
 	when
@@ -33,7 +35,8 @@ maakAfspraak(Afspraken, {B, E, D, A})
 		is_boolean(A)
 	->
 	ets:insert(Afspraken, {{B, make_ref()}, E , D, A}),
-	eventManager:post({B, activiteit, testActiviteit, [self(), B, E, D, A]}).
+	eventManager:post({B, activiteit, testActiviteit, [self(), B, E, D, A]}),
+	eventManager:deletePost({E, persoon, cancelVolgendeAfspraak, [Afspraken, self()]}).
 
 volgendeAfspraak(Afspraken) ->
 	Key = ets:first(Afspraken),
@@ -49,9 +52,16 @@ volgendeAfspraak(Afspraken) ->
 
 cancelVolgendeAfspraak(Afspraken) ->
 	Key = ets:first(Afspraken),
-	[{{Time, _ }, E, D, _}] = ets:lookup(Afspraken, Key),
+	[{{Time, _}, E, D, _}] = ets:lookup(Afspraken, Key),
 	Name = getProcesName(),
 	io:format("~p cancelled volgende afspraak: ~p en is terug beschikbaar tussen ~p en ~p~n", [Name, D, Time, E]),
+	ets:delete(Afspraken, Key).
+
+cancelVolgendeAfspraak(Afspraken, Pid) ->
+	Key = ets:first(Afspraken),
+	[{{_, _}, _, D, _}] = ets:lookup(Afspraken, Key),
+	Name = getProcesName(Pid),
+	io:format("~p is klaar met ~p~n", [Name, D]),
 	ets:delete(Afspraken, Key).
 
 cancelAfspraak(Afspraken, Time) ->
@@ -63,6 +73,10 @@ cancelAfspraak(Afspraken, Time) ->
 getProcesName() ->
 	{_, Name} = erlang:process_info(self(), registered_name),
 	Name.
+getProcesName(Pid) ->
+	{_, Name} = erlang:process_info(Pid, registered_name),
+	Name.
+
 
 
 loop(Afspraken) ->

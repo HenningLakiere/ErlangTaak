@@ -1,5 +1,5 @@
 -module(eventManager).
--export([start/0, init/0, post/1, loop/1, stop/0]).
+-export([start/0, init/0, post/1, deletePost/1, loop/1, stop/0]).
 
 start() ->
 	Pid = spawn(?MODULE, init, []),
@@ -10,8 +10,10 @@ init() ->
 	loop(erlang:system_time(millisecond)).
 
 post({Time, M, F, Args}) -> 
-   eventManager ! {post__event, {Time, M, F, Args}}. 
+	eventManager ! {post__event, {Time, M, F, Args}}.
 
+deletePost({Time, M, F, Args}) ->
+	eventManager ! {deletePost, {Time, M, F, Args}}.
 
 loop(StartTime) ->
 	Time = erlang:system_time(millisecond) - StartTime,
@@ -24,8 +26,11 @@ loop(StartTime) ->
 	end,
 	receive
 		{post__event, {T, M, F, Args}} -> 
-               ecalendar:insert({T, M, F, Args}),
-               ?MODULE:loop (StartTime);
+            	ecalendar:insert({T, M, F, Args}),
+            	?MODULE:loop (StartTime);
+        {deletePost, {T, M, F, Args}} ->
+        		ecalendar:insert({T, M, F, Args}),
+           		?MODULE:loop (StartTime);
 		{stop} ->
 			ok;
 		_ ->
