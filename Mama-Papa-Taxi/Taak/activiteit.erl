@@ -1,8 +1,10 @@
 -module(activiteit).
 -export([testActiviteit/5]).
 
+%afspraak afprinten die gemaakt wordt
 testActiviteit(Pid, B, E, D, A) ->
 	Name = getProcesName(Pid),
+	%auto nodig of niet
 	Auto = if
 		A ->
 			een;

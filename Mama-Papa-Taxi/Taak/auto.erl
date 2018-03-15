@@ -1,13 +1,16 @@
 -module(auto).
 -export([new/0, init/0, maakReservering/2, volgendeReservering/1, loop/1, destroy/1]).
 
+%spawn nieuwe auto Pid
 new() ->
 	Pid = spawn(?MODULE, init, []),
 	Pid.
 
+%initiëren van auto ets tabel en loop beginnen
 init() ->
 	Reserveringen = ets:new(reserveringen, [ordered_set, public]),
 	whereis(autoManager) ! {add, {self(), Reserveringen, 0, false}},
+	%
 	maakReservering(Reserveringen, {infinity, infinity, unknown,destroy}),
 	loop(Reserveringen).
 
@@ -35,10 +38,15 @@ volgendeReservering(Reserveringen) ->
 	Key = ets:first(Reserveringen),
 	[{{B, _}, E, P, D}] = ets:lookup(Reserveringen, Key),
 	Name = getProcesName(),
-	io:format("De volgende reservatie voor: ~p~nDoel: ~p~nvan ~p tot ~p~ndoor: ~p", [Name, D, B, E, P]).
+	Persoon = getProcesName(P),
+	io:format("De volgende reservatie voor: ~p~nDoel: ~p~nvan ~p tot ~p~ndoor: ~p", [Name, D, B, E, Persoon]).
 
 getProcesName() ->
 	{_, Name} = erlang:process_info(self(), registered_name),
+	Name.
+
+getProcesName(Pid) ->
+	{_, Name} = erlang:process_info(Pid, registered_name),
 	Name.
 
 loop(Reserveringen) ->

@@ -1,7 +1,7 @@
 -module(persoon).
 
 -export([new/0, init/0, loop/1, die/1]).
--export([maakAfspraak/2, volgendeAfspraak/1, cancelVolgendeAfspraak/1, cancelVolgendeAfspraak/2, cancelAfspraak/2]).
+-export([maakAfspraak/2, volgendeAfspraak/1, cancelVolgendeAfspraak/1, cancelVolgendeAfspraak/2, cancelAfspraak/2, isIn/2, read/0]).
 
 new() ->
 	Pid = spawn(?MODULE, init, []),
@@ -35,6 +35,19 @@ maakAfspraak(Afspraken, {B, E, D, A})
 		is_boolean(A)
 	->
 	ets:insert(Afspraken, {{B, make_ref()}, E , D, A}),
+	case A of
+		true ->
+			io:format("De beschikbare wagen(s) zijn:~n"),
+			[Auto|_] = autoManager:getBeschikbareWagens(B, E),
+			if	
+				Auto /= [] ->
+					whereis(Auto) ! {maakReservering, {B, E, self(), D}};
+				true ->
+					io:format("No cars available for this time period!")
+			end;
+		_ ->
+			ok
+	end,
 	eventManager:post({B, activiteit, testActiviteit, [self(), B, E, D, A]}),
 	eventManager:deletePost({E, persoon, cancelVolgendeAfspraak, [Afspraken, self()]}).
 
@@ -77,7 +90,18 @@ getProcesName(Pid) ->
 	{_, Name} = erlang:process_info(Pid, registered_name),
 	Name.
 
+isIn(_, []) -> false;
+isIn(Auto, [X|XS]) ->
+if
+	Auto==X ->
+		true;
+	true ->
+		isIn(Auto, XS)
+end.
 
+read() ->
+	{_, [Auto]} = io:get_line("Keuze wagen: "),
+	Auto.
 
 loop(Afspraken) ->
 	receive
@@ -97,5 +121,3 @@ loop(Afspraken) ->
 			io:format("Niet herkende opdracht, probeer opnieuw!"),
 			?MODULE:loop(Afspraken)
 	end.
-
-
