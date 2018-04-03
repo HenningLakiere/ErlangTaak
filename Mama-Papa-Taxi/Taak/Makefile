@@ -9,4 +9,4 @@ all:
 	erl -compile testfile
 
 	#start de erlang shell
-	werl
+	erl

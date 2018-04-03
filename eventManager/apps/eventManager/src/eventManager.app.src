@@ -5,9 +5,7 @@
 	{registered, [eventManager]},
 	{applications, [
 		kernel,
-		stdlib,
-		cowboy,
-		erlydtl
+		stdlib
 	]},
 	{mod, {eventManager_app, []}},
 	{env, []}

@@ -14,10 +14,10 @@ start() ->
 	register(tesla, auto:new()),
 	register(audi, auto:new()),
 	register(suzuki, auto:new()),
-	%register(volkswagen, auto:new()),
-	%register(zonda, auto:new()),
+	register(volkswagen, auto:new()),
+	register(zonda, auto:new()),
 
-	observer:start(),
+	%observer:start(),
 	%whereis(autoManager) ! {getReservaties, tesla},
 
 	whereis(henning) ! {maakAfspraak, {1000, 1500, werken, true}},
@@ -30,13 +30,3 @@ start() ->
 	whereis(henning) ! {maakAfspraak, {6000, 6500, werken, false}},
 	whereis(henning) ! {maakAfspraak, {7000, 7500, werken, true}},
 	whereis(henning) ! {maakAfspraak, {7600, 8500, werken, true}}.
-
-	%whereis(autoManager) ! {getBeschikbareWagens, {1, 2}},
-
-
-	%whereis(henning) ! {volgendeAfspraak},
-	%whereis(henning) ! {cancelVolgendeAfspraak},
-
-
-	
-	
