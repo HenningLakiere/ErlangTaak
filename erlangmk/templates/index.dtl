@@ -1,0 +1,3 @@
+<html><body>
+<p> favo pony is {{ pid }}. </p>
+</body></html>
