@@ -1,0 +1,12 @@
+{release,{"eventManager","1"},
+         {erts,"9.3"},
+         [{kernel,"5.4.3"},
+          {stdlib,"3.4.4"},
+          {compiler,"7.1.5"},
+          {syntax_tools,"2.1.4"},
+          {ranch,"1.2.1"},
+          {crypto,"4.2.1"},
+          {cowlib,"1.0.2"},
+          {erlydtl,"git"},
+          {cowboy,"1.0.4"},
+          {eventManager,"0.1.1"}]}. 

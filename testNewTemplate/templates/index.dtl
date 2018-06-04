@@ -1,47 +1,116 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="robots" content="noindex, nofollow"> 
+<meta charset='utf-8' />
+<link rel="stylesheet" href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' />
+<script src='lib/moment.min.js'></script>
+<script src='lib/jquery.min.js'></script>
+<script src='fullcalendar.min.js'></script>
 
-    <title>Calendar Design - Bootsnipp.com</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
-    <link media="all" type="text/css" rel="stylesheet" href="https://bootsnipp.com/css/fullscreen.css">
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<script>
 
+  $(document).ready(function() {
+
+    $('#calendar').fullCalendar({
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listWeek'
+      },
+      defaultDate: '2018-03-12',
+      navLinks: true, // can click day/week names to navigate views
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [
+        {
+          title: 'All Day Event',
+          start: '2018-03-01',
+        },
+
+        {
+          title: 'Long Event',
+          start: '2018-03-07',
+          end: '2018-03-10'
+        },
+        {
+          id: 999,
+          title: 'Repeating Event',
+          start: '2018-03-09T16:00:00'
+        },
+        {
+          id: 999,
+          title: 'Repeating Event',
+          start: '2018-03-16T16:00:00'
+        },
+        {
+          title: 'Conference',
+          start: '2018-03-11',
+          end: '2018-03-13'
+        },
+        {
+          title: 'Meeting',
+          start: '2018-03-12T10:30:00',
+          end: '2018-03-12T12:30:00'
+        },
+        {
+          title: 'Lunch',
+          start: '2018-03-12T12:00:00'
+        },
+        {
+          title: 'Meeting',
+          start: '2018-03-12T14:30:00'
+        },
+        {
+          title: 'Happy Hour',
+          start: '2018-03-12T17:30:00'
+        },
+        {
+          title: 'Dinner',
+          start: '2018-03-12T20:00:00'
+        },
+        {
+          title: 'Henning',
+          start: '2018-03-13T07:00:00'
+        },
+        {
+            title: 'Henning',
+            start: '2018-03-13T07:00:00',
+            end: '2018-03-13T12:00:00'
+        },
+        {
+          title: 'Click for Google',
+          url: 'http://google.com/',
+          start: '2018-03-28'
+        }
+      ]
+    });
+
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+</style>
 </head>
 <body>
-    <div id="toolbar">
-        Theme: 
-        <select class="form-control" name="bootstrap-theme" id="theme_chooser">
-          <option value="">Plain Bootstrap</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/amelia/bootstrap.min.css">Amelia</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/cerulean/bootstrap.min.css">Cerulean</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/cosmo/bootstrap.min.css">Cosmo</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/cyborg/bootstrap.min.css">Cyborg</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/flatly/bootstrap.min.css">Flatly</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/journal/bootstrap.min.css">Journal</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/lumen/bootstrap.min.css">Lumen</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/readable/bootstrap.min.css">Readable</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/simplex/bootstrap.min.css">Simplex</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/slate/bootstrap.min.css">Slate</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/spacelab/bootstrap.min.css">Spacelab</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/superhero/bootstrap.min.css">Superhero</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/united/bootstrap.min.css">United</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/yeti/bootstrap.min.css">Yeti</option><option value="//maxcdn.bootstrapcdn.com/bootswatch/3.3.0/darkly/bootstrap.min.css">Darkly</option>
-        </select>
-                <a href="https://bootsnipp.com/snippets/M3jmA" class="btn btn-default">View on Bootsnipp.com</a>
-                <a class="btn btn-default" href="close" onclick="window.close();return false;">&times;</a>
-    </div>
 
-    <iframe id="snippet-preview" src="//s.bootsnipp.com/iframe/M3jmA" frameborder='no'></iframe>
+  <div id='calendar'></div>
 
-    <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-34731274-1']);
-    _gaq.push(['_trackPageview']);
-    _gaq.push(['_trackEvent', 'sharing', 'viewed full-screen', 'snippet M3jmA',0,true]);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-    </script>
-    <script type="text/javascript">
-    (function($) { 
-        $('#theme_chooser').change(function(){
-            whichCSS = $(this).val();
-            document.getElementById('snippet-preview').contentWindow.changeCSS(whichCSS);
-        });
-    })(jQuery);
-    </script>
 </body>
 </html>
-

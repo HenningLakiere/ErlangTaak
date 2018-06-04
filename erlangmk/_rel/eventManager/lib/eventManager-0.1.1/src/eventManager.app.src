@@ -1,0 +1,14 @@
+{application, eventManager, [
+	{description, "Calendar application!"},
+	{vsn, "0.1.1"},
+	{modules, []},
+	{registered, [eventManager]},
+	{applications, [
+		kernel,
+		stdlib,
+		cowboy,
+		erlydtl
+	]},
+	{mod, {eventManager_app, []}},
+	{env, []}
+]}.
